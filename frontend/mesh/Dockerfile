@@ -1,0 +1,1 @@
+FROM nextjs:15.2 AS builder
