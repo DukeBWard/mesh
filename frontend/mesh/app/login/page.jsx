@@ -1,12 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { login, signup } from './actions';
 
 export default function LoginPage() {
     // track if sign up or login
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (event) => {
     // normal form submissions refreshes, no good
@@ -19,7 +21,13 @@ export default function LoginPage() {
     
     try {
       if (isLogin) {
-        await login(email, password);
+        const data = await login(email, password);
+        // Store the auth token if returned
+        if (data.token) {
+          localStorage.setItem('authToken', data.token);
+        }
+        // Redirect to new session page after successful login
+        router.push('/session/new');
       } else {
         const username = formData.get('username');
         await signup(email, username, password);
