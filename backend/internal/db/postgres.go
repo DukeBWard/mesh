@@ -11,7 +11,6 @@ import (
 
 var DB *gorm.DB
 
-// InitDB initializes the database connection
 func InitDB() (*gorm.DB, error) {
 
 	host := getEnvOrDefault("DB_HOST", "localhost")
@@ -45,7 +44,6 @@ func InitDB() (*gorm.DB, error) {
 	return db, nil
 }
 
-// getEnvOrDefault returns the value of an environment variable or a default value if not set
 func getEnvOrDefault(key, defaultValue string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value
