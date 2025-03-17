@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	"github.com/google/uuid"
 
 	"github.com/dukebward/mesh/internal/api/handlers"
 	"github.com/dukebward/mesh/internal/db"
@@ -14,8 +15,15 @@ import (
 )
 
 func testDB() {
+
+	userID, err := uuid.NewUUID()
+	if err != nil {
+		log.Printf("uuid error")
+		return
+	}
 	// create a test user
 	testUser := models.User{
+		ID:       userID.String(),
 		Email:    "test@example.com",
 		Password: "testpass123",
 	}

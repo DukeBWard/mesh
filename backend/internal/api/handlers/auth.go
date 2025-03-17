@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/dukebward/mesh/internal/db"
@@ -84,7 +85,15 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// make uuid
+	userID, err := uuid.NewUUID()
+	if err != nil {
+		http.Error(w, "Error generating user ID", http.StatusInternalServerError)
+		return
+	}
+
 	user := models.User{
+		ID:       userID.String(),
 		Email:    req.Email,
 		Password: string(hashedPassword),
 	}
