@@ -7,41 +7,62 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"github.com/dukebward/mesh/internal/models"
 )
 
 var DB *gorm.DB
 
 func InitDB() (*gorm.DB, error) {
-
 	host := getEnvOrDefault("DB_HOST", "localhost")
 	user := getEnvOrDefault("DB_USER", "postgres")
 	password := getEnvOrDefault("DB_PASSWORD", "postgres")
 	dbname := getEnvOrDefault("DB_NAME", "mesh_db")
 	port := getEnvOrDefault("DB_PORT", "5432")
 
-	// Create the connection string
+	// connection string
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		host, user, password, dbname, port)
 
-	// Open connection to database
+	// connect
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}
 
-	// Get the underlying SQL DB object
+	// get the underlying SQL DB object
 	sqlDB, err := db.DB()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get database instance: %w", err)
 	}
 
-	// Set connection pool settings
+	// set connection pool settings
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(100)
 
 	DB = db
-	log.Println("Successfully connected to database")
+
+	// run migrations
+	if err := AutoMigrate(db); err != nil {
+		return nil, fmt.Errorf("failed to run migrations: %w", err)
+	}
+
+	log.Println("Successfully connected to database and ran migrations")
 	return db, nil
+}
+
+// automigrate models
+func AutoMigrate(db *gorm.DB) error {
+	// models listed here
+	if err := db.AutoMigrate(
+		&models.User{},
+		&models.Session{},
+		&models.Message{},
+	); err != nil {
+		return fmt.Errorf("failed to auto-migrate tables: %w", err)
+	}
+
+	return nil
 }
 
 func getEnvOrDefault(key, defaultValue string) string {

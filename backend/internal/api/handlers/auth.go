@@ -26,7 +26,7 @@ type AuthResponse struct {
 	Token string `json:"token"`
 }
 
-var jwtSecret = []byte("your-secret-key") // TODO: Move to environment variable
+var jwtSecret = []byte("secret-key") // TODO: Move to environment variable
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	var req LoginRequest

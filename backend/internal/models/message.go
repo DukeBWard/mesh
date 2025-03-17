@@ -4,7 +4,6 @@ import (
 	"time"
 )
 
-// MessageType represents the type of message
 type MessageType string
 
 const (
@@ -12,7 +11,6 @@ const (
 	MessageTypeSystem MessageType = "system"
 )
 
-// Message represents a chat message in a session
 type Message struct {
 	ID        string      `json:"id" gorm:"primaryKey;type:uuid"`
 	SessionID string      `json:"session_id" gorm:"type:uuid;not null;index"`
