@@ -9,9 +9,43 @@ import (
 	"github.com/go-chi/cors"
 
 	"github.com/dukebward/mesh/internal/api/handlers"
+	"github.com/dukebward/mesh/internal/db"
+	"github.com/dukebward/mesh/internal/models"
 )
 
+func testDB() {
+	// create a test user
+	testUser := models.User{
+		Email:    "test@example.com",
+		Password: "testpass123",
+	}
+
+	result := db.GetDB().Create(&testUser)
+	if result.Error != nil {
+		log.Printf("Test user creation failed: %v\n", result.Error)
+	} else {
+		log.Printf("Test user created successfully with ID: %v\n", testUser.ID)
+
+		// Try to retrieve the user
+		var foundUser models.User
+		result = db.GetDB().Where("email = ?", "test@example.com").First(&foundUser)
+		if result.Error != nil {
+			log.Printf("Failed to find test user: %v\n", result.Error)
+		} else {
+			log.Printf("Found test user with ID: %v\n", foundUser.ID)
+		}
+	}
+}
+
 func main() {
+	// init db
+	if _, err := db.InitDB(); err != nil {
+		log.Fatal("Failed to initialize database:", err)
+	}
+
+	// db conn test
+	testDB()
+
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
