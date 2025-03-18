@@ -15,24 +15,21 @@ export default function LoginPage() {
     event.preventDefault();
     setError('');
 
-    const formData = new FormData(event.target);
-    const email = formData.get('email');
-    const password = formData.get('password');
-    
     try {
-      if (isLogin) {
-        const data = await login(email, password);
-        // Store the auth token if returned
-        if (data.token) {
-          localStorage.setItem('authToken', data.token);
-        }
-        // Redirect to new session page after successful login
-        router.push('/session/new');
-      } else {
-        const username = formData.get('username');
-        await signup(email, username, password);
-      }
+      const formData = new FormData(event.target);
+      const email = formData.get('email');
+      const password = formData.get('password');
 
+      //login or signup
+      const data = isLogin 
+        ? await login(email, password)
+        : await signup(email, formData.get('username'), password);
+      
+      // store jwt
+      if (data.token) {
+        localStorage.setItem('authToken', data.token);
+      }
+      router.push('/session/new');
     } catch (err) {
       setError(err.message);
     }

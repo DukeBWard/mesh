@@ -20,6 +20,7 @@ type LoginRequest struct {
 
 type SignupRequest struct {
 	Email    string `json:"email"`
+	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
@@ -78,6 +79,13 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// check if username already exists
+	result = db.GetDB().Where("username = ?", req.Username).First(&existingUser)
+	if result.Error == nil {
+		http.Error(w, "Username already taken", http.StatusConflict)
+		return
+	}
+
 	// hash the password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -95,6 +103,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	user := models.User{
 		ID:       userID.String(),
 		Email:    req.Email,
+		Username: req.Username,
 		Password: string(hashedPassword),
 	}
 
