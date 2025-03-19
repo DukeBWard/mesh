@@ -1,0 +1,8 @@
+config:
+  kubernetes:mesh:frontendImage: mesh-frontend:dev
+  kubernetes:mesh:frontendReplicas: 1
+  kubernetes:mesh:frontendPort: 3000
+  kubernetes:mesh:backendImage: mesh-backend:dev
+  kubernetes:mesh:backendReplicas: 1
+  kubernetes:mesh:backendPort: 8080
+  kubernetes:kubeconfig: ~/.kube/config 
