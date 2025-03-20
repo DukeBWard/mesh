@@ -57,11 +57,11 @@ pulumi up
 Sensitive data is managed through Pulumi secrets and GitHub Secrets. 
 Required secrets for CI/CD:
 
-- `PULUMI_ACCESS_TOKEN`
-- `AZURE_CREDENTIALS`
-- `DOCKER_REPOSITORY`
-- `DOCKER_USERNAME`
-- `DOCKER_PASSWORD`
+- `PULUMI_ACCESS_TOKEN` - Your Pulumi access token
+- `DOCKER_REPOSITORY` - Docker registry URL
+- `DOCKER_USERNAME` - Docker registry username
+- `DOCKER_PASSWORD` - Docker registry password
+- `KUBE_CONFIG` - Base64 encoded Kubernetes config file for cluster access
 
 ## Adding New Resources
 

@@ -4,5 +4,4 @@ config:
   kubernetes:mesh:frontendPort: 3000
   kubernetes:mesh:backendImage: mesh-backend:staging
   kubernetes:mesh:backendReplicas: 2
-  kubernetes:mesh:backendPort: 8080
-  kubernetes:kubeconfig: ~/.kube/config 
+  kubernetes:mesh:backendPort: 8080 
