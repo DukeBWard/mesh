@@ -10,12 +10,12 @@ const frontendImage = config.get('frontendImage') || 'mesh-frontend:latest';
 const frontendReplicas = config.getNumber('frontendReplicas') || 2;
 const frontendPort = config.getNumber('frontendPort') || 3000;
 
-// Backend configuration
+// backend config
 const backendImage = config.get('backendImage') || 'mesh-backend:latest';
 const backendReplicas = config.getNumber('backendReplicas') || 2;
 const backendPort = config.getNumber('backendPort') || 8080;
 
-// Create a Kubernetes namespace for your application
+// Create a Kubernetes namespace 
 const namespace = new k8s.core.v1.Namespace(`${appName}-${environment}`, {
     metadata: {
         name: `${appName}-${environment}`,
